@@ -196,7 +196,9 @@ h2 {
 }
 
 .logo-icon {
-    font-size: 1.5rem;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
 }
 
 .nav-links {
@@ -528,7 +530,7 @@ h2 {
 
 /* ===== Sprout Section ===== */
 .sprout-section {
-    padding: 100px 24px;
+    padding: 60px 24px;
     background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
     overflow: hidden;
 }
@@ -551,8 +553,13 @@ h2 {
 }
 
 .sprout-emoji {
-    font-size: 3rem;
     margin-bottom: 16px;
+}
+
+.sprout-emoji img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
 }
 
 .sprout-text h2 {
@@ -619,7 +626,7 @@ h2 {
 
 /* ===== Testimonials ===== */
 .testimonials {
-    padding: 100px 24px;
+    padding: 60px 24px;
 }
 
 .testimonials-container {
@@ -1003,7 +1010,7 @@ h2 {
     }
 
     .sprout-container {
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
         text-align: center;
         gap: 40px;
@@ -1029,10 +1036,17 @@ h2 {
     .cta-container {
         flex-direction: column;
         text-align: center;
+        align-items: center;
+    }
+
+    .cta-content {
+        max-width: 100%;
     }
 
     .cta-buttons {
         align-items: center;
+        max-width: 100%;
+        width: 100%;
     }
 
     .footer-top {
