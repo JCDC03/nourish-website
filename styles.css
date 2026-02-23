@@ -36,14 +36,21 @@ html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
 }
 
 body {
     font-family: var(--font-body);
     background: var(--bg-primary);
     color: var(--text-primary);
-    overflow-x: hidden;
+    overflow-x: clip;
     line-height: 1.6;
+}
+
+.page-wrapper {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
 }
 
 a {
@@ -158,6 +165,8 @@ h2 {
     padding: 16px 0;
     transition: all var(--transition);
     background: transparent;
+    max-width: 100vw;
+    overflow: hidden;
 }
 
 .navbar.scrolled {
@@ -263,6 +272,7 @@ h2 {
     padding: 120px 24px 60px;
     position: relative;
     overflow: hidden;
+    max-width: 100vw;
 }
 
 .hero-content {
@@ -403,11 +413,14 @@ h2 {
     border-bottom: 1px solid var(--border);
     overflow: hidden;
     background: var(--bg-secondary);
+    max-width: 100vw;
 }
 
 .marquee {
     display: flex;
     overflow: hidden;
+    width: 100%;
+    max-width: 100vw;
 }
 
 .marquee-content {
@@ -439,6 +452,7 @@ h2 {
 /* ===== Features ===== */
 .features {
     padding: 60px 0;
+    overflow-x: hidden;
 }
 
 .feature-block {
@@ -516,6 +530,7 @@ h2 {
 .sprout-section {
     padding: 100px 24px;
     background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    overflow: hidden;
 }
 
 .sprout-container {
@@ -691,6 +706,7 @@ h2 {
     color: white;
     position: relative;
     overflow: hidden;
+    max-width: 100vw;
 }
 
 .cta-container {
@@ -920,12 +936,16 @@ h2 {
 
     .hero-content {
         flex-direction: column;
+        align-items: center;
         text-align: center;
         gap: 40px;
     }
 
     .hero-text {
         max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .hero-subtitle {
@@ -940,9 +960,21 @@ h2 {
         justify-content: center;
     }
 
+    .hero-phone {
+        display: block;
+    }
+
     .hero-phone .phone-mockup {
         width: 240px;
         height: 500px;
+        display: block;
+    }
+
+    .hero-phone .phone-mockup img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .feature-block {
@@ -953,6 +985,7 @@ h2 {
     .feature-right .feature-container,
     .feature-left .feature-container {
         flex-direction: column;
+        align-items: center;
         text-align: center;
         gap: 40px;
     }
@@ -971,12 +1004,21 @@ h2 {
 
     .sprout-container {
         flex-direction: column;
+        align-items: center;
         text-align: center;
         gap: 40px;
     }
 
     .sprout-text > p {
         max-width: 100%;
+    }
+
+    .testimonials {
+        padding: 50px 20px;
+    }
+
+    .testimonials-header {
+        margin-bottom: 32px;
     }
 
     .testimonials-grid {
