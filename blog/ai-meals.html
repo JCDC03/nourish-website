@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Nourish's AI Identifies Your Meals in Under a Second - Nourish Blog</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../images/sprout-icon.png">
+</head>
+<body>
+    <div class="page-wrapper">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <img src="../images/sprout-icon.png" alt="Nourish" class="logo-icon">
+                <span class="logo-text">Nourish</span>
+            </a>
+            <div class="nav-links">
+                <a href="../index.html#features">Features</a>
+                <a href="../index.html#sprout">Sprout AI</a>
+                <a href="../index.html#testimonials">Reviews</a>
+            </div>
+            <div class="nav-cta">
+                <a href="../index.html#download" class="btn btn-primary btn-sm">Download Free</a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <a href="../index.html#features">Features</a>
+        <a href="../index.html#sprout">Sprout AI</a>
+        <a href="../index.html#testimonials">Reviews</a>
+        <a href="../index.html#download" class="btn btn-primary">Download Free</a>
+    </div>
+
+    <!-- Blog Post -->
+    <article class="blog-post">
+        <div class="blog-post-header">
+            <a href="../blog.html" class="blog-back-link">&larr; Back to Blog</a>
+            <div class="blog-post-meta">
+                <span class="pill">Product</span>
+                <span>Feb 5, 2026</span>
+                <span>5 min read</span>
+            </div>
+            <h1>How Nourish's AI Identifies Your Meals in Under a Second</h1>
+            <div class="blog-post-hero">
+                <img src="../images/blog/ai-meals.jpg" alt="How Nourish's AI Identifies Your Meals in Under a Second">
+            </div>
+        </div>
+        <div class="blog-post-content">
+            <p>Food logging has a dropout problem. Studies consistently show that most people who start tracking their nutrition abandon the habit within two weeks. The reason is not a lack of motivation &mdash; it is friction. Manually searching databases for every ingredient, estimating portion sizes, and entering data for three or more meals a day is tedious, time-consuming, and surprisingly inaccurate. By the time you have logged your lunch, you have already lost the will to log dinner.</p>
+
+            <p>This is the problem we set out to solve when we built Nourish. We wanted food logging to feel effortless &mdash; as simple as taking a photo. Here is how we made that possible.</p>
+
+            <h2>The Problem with Manual Food Logging</h2>
+
+            <p>Traditional nutrition tracking apps require you to search a database, select the correct item from dozens of similar results, estimate how much you ate, and repeat for every component of your meal. A simple chicken salad might require five or six separate entries: the chicken breast, the lettuce, the tomatoes, the cucumber, the dressing, the croutons.</p>
+
+            <p>This process typically takes two to five minutes per meal. That might not sound like much, but across three meals and a couple of snacks, you are spending fifteen to twenty minutes a day on data entry. More importantly, the cognitive burden is significant. Every meal becomes an administrative task, and that constant friction wears people down quickly.</p>
+
+            <p>There is also the accuracy problem. Research has shown that people consistently underestimate portion sizes when logging manually, often by 30 percent or more. If the data going in is unreliable, the insights coming out are equally unreliable. You end up with a false sense of precision that does not actually help you make better decisions.</p>
+
+            <h2>How Nourish's Computer Vision Works</h2>
+
+            <p>When you take a photo of your meal with Nourish, a sophisticated computer vision system analyses the image in milliseconds. At a high level, the process works in three stages.</p>
+
+            <p><strong>Stage one is detection.</strong> The AI identifies that there is food in the image and segments the photo into distinct regions. It distinguishes the plate from the table, separates individual food items from one another, and identifies the boundaries between different components of the meal. This segmentation step is crucial because most real-world meals are not a single item &mdash; they are combinations of foods arranged together.</p>
+
+            <p><strong>Stage two is classification.</strong> Each detected food region is analysed and matched against our recognition model. The system identifies not just broad categories like "salad" or "pasta" but specific items: grilled chicken breast, brown rice, steamed broccoli, cherry tomatoes, tahini dressing. It understands that a green item next to rice is likely broccoli, not lettuce, because of the visual context surrounding it.</p>
+
+            <p><strong>Stage three is estimation.</strong> Once the foods are identified, the system estimates portion sizes using visual cues: the relative size of items, the depth and spread of food on the plate, and reference points like the plate itself. This is combined with our nutrition database to generate a complete nutritional breakdown &mdash; calories, macronutrients, and micronutrients &mdash; all within about a second of you pressing the shutter button.</p>
+
+            <h2>Training on Millions of Real-World Food Images</h2>
+
+            <p>The accuracy of any computer vision system depends on the quality and diversity of its training data. We have trained Nourish's models on millions of food images spanning cuisines from around the world. This is not limited to the neatly plated dishes you see on recipe websites. Our training data includes messy real-life meals: half-eaten plates, food in takeaway containers, dishes photographed in dim restaurant lighting, home-cooked meals that do not look like their recipe photos, and everything in between.</p>
+
+            <p>Crucially, we have prioritised diversity in cuisines. A food recognition system that only knows Western dishes is not useful for the majority of the world's population. Nourish recognises Japanese bento components, Indian curries and dals, Middle Eastern mezze, Mexican street food, West African stews, Southeast Asian noodle dishes, and hundreds of other regional specialities. We continue to expand this coverage constantly, because food is global and our users are too.</p>
+
+            <h2>Handling the Hard Cases</h2>
+
+            <p>Real meals are messy, and that is where the real engineering challenge lies. Here are some of the scenarios our system handles that simpler approaches struggle with.</p>
+
+            <ul>
+                <li><strong>Mixed plates and bowls.</strong> A poke bowl with rice, salmon, avocado, edamame, seaweed, and pickled ginger is not one food &mdash; it is six or seven. Our segmentation model separates these components even when they overlap and partially obscure one another.</li>
+                <li><strong>Partial views.</strong> You do not always photograph your entire meal from directly above. Our system handles angled shots, partially visible plates, and even photos where some food is cut off at the edge of the frame.</li>
+                <li><strong>Restaurant meals.</strong> Dishes served in restaurants often look different from their home-cooked equivalents. Sauces, garnishes, and plating styles vary enormously. Our models have been trained on restaurant food photography specifically to handle these variations.</li>
+                <li><strong>Similar-looking foods.</strong> White rice and cauliflower rice look remarkably similar in photos but have very different nutritional profiles. Our system uses contextual cues &mdash; what else is on the plate, the texture of the grain, subtle colour differences &mdash; to distinguish between visually similar foods.</li>
+            </ul>
+
+            <h2>The Nutrition Database Behind the Vision</h2>
+
+            <p>Visual recognition is only half the equation. Once the AI knows what you are eating, it needs to know what that food contains. Behind Nourish's camera sits a comprehensive nutrition database with detailed profiles for thousands of foods, including full macronutrient and micronutrient data.</p>
+
+            <p>This database is not static. It is continuously updated with new foods, refined with better nutritional data, and adjusted to reflect regional variations. A chicken tikka masala from a British takeaway has a different nutritional profile from one prepared at home with less oil. These nuances matter, and our database is built to account for them.</p>
+
+            <h2>Getting Smarter Over Time</h2>
+
+            <p>One of Nourish's most powerful features is its ability to improve through user feedback. When the AI makes a mistake &mdash; and it will, because food recognition is genuinely hard &mdash; you can correct it with a tap. That correction does not just fix your log. It feeds back into our system, helping the model learn from its errors and improve for everyone.</p>
+
+            <p>This creates a virtuous cycle. The more people use Nourish, the more corrections flow in, the more accurate the system becomes, and the fewer corrections are needed. Our recognition accuracy has improved steadily since launch and continues to improve every month.</p>
+
+            <h2>What Is Next</h2>
+
+            <p>We are not done. Our roadmap includes several features that will make food logging even more seamless.</p>
+
+            <ul>
+                <li><strong>Real-time recognition</strong> that identifies food as you point your camera, before you even press the shutter. This will make the logging experience feel truly instantaneous.</li>
+                <li><strong>Improved barcode scanning</strong> for packaged foods, with faster lookup times and a broader database of products from supermarkets worldwide.</li>
+                <li><strong>Multi-meal memory</strong> that learns your regular meals and can auto-suggest them based on time of day and your patterns, reducing the need to photograph the same breakfast you eat every weekday.</li>
+                <li><strong>Restaurant menu integration</strong> that lets you select dishes from a menu and get nutritional estimates without needing a photo at all.</li>
+            </ul>
+
+            <p>The goal has always been the same: remove every possible barrier between you and understanding what you eat. Food logging should take seconds, not minutes. It should be accurate without being obsessive. And it should give you genuine insight, not just numbers on a screen.</p>
+
+            <p>That is what Nourish's AI is built to do &mdash; and it is getting better at it every single day.</p>
+        </div>
+        <div class="blog-post-footer">
+            <a href="../blog.html" class="btn btn-primary btn-sm">&larr; Back to Blog</a>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="../index.html" class="nav-logo">
+                        <img src="../images/sprout-icon.png" alt="Nourish" class="logo-icon">
+                        <span class="logo-text">Nourish</span>
+                    </a>
+                    <p>Eat Better, Together.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Product</h4>
+                        <a href="../index.html#features">Features</a>
+                        <a href="../index.html#sprout">Sprout AI</a>
+                        <a href="../index.html#testimonials">Reviews</a>
+                        <a href="../index.html#download">Download</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Company</h4>
+                        <a href="../about.html">About</a>
+                        <a href="../blog.html">Blog</a>
+                        <a href="../careers.html">Careers</a>
+                        <a href="../contact.html">Contact</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <a href="../privacy.html">Privacy Policy</a>
+                        <a href="../terms.html">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Nourish. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="https://instagram.com/getnourishapp" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="https://tiktok.com/@usenourishapp" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.75a8.18 8.18 0 004.76 1.52V6.84a4.84 4.84 0 01-1-.15z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    </div>
+    <script src="../script.js"></script>
+</body>
+</html>
