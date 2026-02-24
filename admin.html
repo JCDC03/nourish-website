@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Nourish</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/sprout-icon.png">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        .admin-container { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+
+        /* Login */
+        .login-card {
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px;
+        }
+        .login-card h2 {
+            font-family: var(--font-primary);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .login-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .login-error {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* Stats */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+        .stat-card:hover { box-shadow: var(--shadow-sm); }
+        .stat-number {
+            font-family: var(--font-primary);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        /* Toolbar */
+        .admin-toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color var(--transition);
+        }
+        .search-input:focus { border-color: var(--accent-green); }
+        .search-input::placeholder { color: var(--text-muted); }
+
+        .filter-tabs { display: flex; gap: 6px; }
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: 1.5px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            transition: all var(--transition);
+        }
+        .filter-tab:hover { border-color: var(--text-muted); }
+        .filter-tab.active {
+            background: var(--text-primary);
+            color: white;
+            border-color: var(--text-primary);
+        }
+
+        /* Submissions */
+        .submission-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 14px;
+            transition: all var(--transition);
+        }
+        .submission-card:hover { box-shadow: var(--shadow-md); }
+        .submission-card.unread { border-left: 4px solid var(--accent-green); }
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .submission-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .submission-name {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+        .submission-email {
+            display: inline-block;
+            padding: 3px 10px;
+            background: var(--accent-green-light);
+            color: var(--accent-green);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .submission-email:hover { opacity: 0.8; }
+        .submission-time {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .submission-subject {
+            font-family: var(--font-primary);
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .submission-message {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .submission-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-action {
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: 1.5px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            transition: all var(--transition);
+        }
+        .btn-action:hover { border-color: var(--text-primary); color: var(--text-primary); }
+        .btn-action.delete { color: #dc2626; border-color: #fde8e8; }
+        .btn-action.delete:hover { background: #fef2f2; border-color: #dc2626; }
+        .btn-action.reply { color: var(--accent-green); border-color: var(--accent-green-light); }
+        .btn-action.reply:hover { background: var(--accent-green-light); border-color: var(--accent-green); }
+
+        /* Empty & Loading states */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--text-muted);
+        }
+        .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 16px; }
+        .empty-state h3 {
+            font-family: var(--font-primary);
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+        .empty-state p { font-size: 0.9rem; }
+
+        .loading-state {
+            text-align: center;
+            padding: 48px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Logout button */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .admin-title {
+            font-family: var(--font-primary);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+        .btn-logout {
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            font-family: var(--font-body);
+            cursor: pointer;
+            border: 1.5px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            transition: all var(--transition);
+        }
+        .btn-logout:hover { border-color: var(--text-primary); color: var(--text-primary); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .stat-card { padding: 14px; }
+            .stat-number { font-size: 1.5rem; }
+            .submission-card { padding: 20px; }
+            .admin-toolbar { flex-direction: column; }
+            .search-input { min-width: 100%; }
+        }
+        @media (max-width: 480px) {
+            .admin-stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/sprout-icon.png" alt="Nourish" class="logo-icon">
+                <span class="logo-text">Nourish</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html#features">Features</a>
+                <a href="index.html#sprout">Sprout AI</a>
+                <a href="index.html#testimonials">Reviews</a>
+            </div>
+            <div class="nav-cta">
+                <a href="index.html#download" class="btn btn-primary btn-sm">Download Free</a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#sprout">Sprout AI</a>
+        <a href="index.html#testimonials">Reviews</a>
+        <a href="index.html#download" class="btn btn-primary">Download Free</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="page-hero">
+        <span class="feature-label">Admin</span>
+        <h1>Contact<br><span class="gradient-text">submissions.</span></h1>
+        <p>View and manage messages from your contact form.</p>
+    </section>
+
+    <!-- Content -->
+    <section class="content-section">
+        <div class="admin-container">
+
+            <!-- Login Screen -->
+            <div id="login-screen">
+                <div class="login-card">
+                    <h2>Sign in</h2>
+                    <p>Enter your admin password to continue.</p>
+                    <div id="login-error" class="login-error"></div>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter admin password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Sign In</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Dashboard (hidden until authenticated) -->
+            <div id="dashboard" style="display: none;">
+                <div class="admin-header">
+                    <div class="admin-title">Submissions</div>
+                    <button class="btn-logout" onclick="logout()">Sign Out</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-total">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-unread">0</div>
+                        <div class="stat-label">Unread</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-week">0</div>
+                        <div class="stat-label">This Week</div>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="admin-toolbar">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search by name, email, or subject...">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">All</button>
+                        <button class="filter-tab" data-filter="unread">Unread</button>
+                        <button class="filter-tab" data-filter="read">Read</button>
+                    </div>
+                </div>
+
+                <!-- Submissions List -->
+                <div id="submissions-list">
+                    <div class="loading-state">
+                        <div class="loading-spinner"></div>
+                        Loading submissions...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="index.html" class="nav-logo">
+                        <img src="images/sprout-icon.png" alt="Nourish" class="logo-icon">
+                        <span class="logo-text">Nourish</span>
+                    </a>
+                    <p>Eat Better, Together.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Product</h4>
+                        <a href="index.html#features">Features</a>
+                        <a href="index.html#sprout">Sprout AI</a>
+                        <a href="index.html#testimonials">Reviews</a>
+                        <a href="index.html#download">Download</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Company</h4>
+                        <a href="about.html">About</a>
+                        <a href="blog.html">Blog</a>
+                        <a href="careers.html">Careers</a>
+                        <a href="contact.html">Contact</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <a href="privacy.html">Privacy Policy</a>
+                        <a href="terms.html">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Nourish. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="https://instagram.com/getnourishapp" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                    <a href="https://tiktok.com/@usenourishapp" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.75a8.18 8.18 0 004.76 1.52V6.84a4.84 4.84 0 01-1-.15z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    </div><!-- end page-wrapper -->
+    <script src="script.js"></script>
+    <script>
+    (function() {
+        // ===== State =====
+        let submissions = [];
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let refreshTimer = null;
+
+        // ===== DOM Elements =====
+        const loginScreen = document.getElementById('login-screen');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const searchInput = document.getElementById('search-input');
+        const submissionsList = document.getElementById('submissions-list');
+
+        // ===== Config =====
+        const API_BASE = window.location.origin;
+
+        // ===== Auth =====
+        function getPassword() {
+            return sessionStorage.getItem('admin_password') || '';
+        }
+
+        // Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pw = document.getElementById('password').value;
+            loginError.style.display = 'none';
+
+            try {
+                const res = await fetch(API_BASE + '/api/submissions', {
+                    headers: { 'Authorization': 'Bearer ' + pw }
+                });
+
+                if (res.status === 401) {
+                    loginError.textContent = 'Incorrect password. Please try again.';
+                    loginError.style.display = 'block';
+                    return;
+                }
+
+                if (!res.ok) throw new Error('Server error');
+
+                sessionStorage.setItem('admin_password', pw);
+                submissions = await res.json();
+                showDashboard();
+            } catch (err) {
+                loginError.textContent = 'Could not connect. Please try again.';
+                loginError.style.display = 'block';
+            }
+        });
+
+        // Check if already logged in
+        if (getPassword()) {
+            fetchSubmissions().then(() => showDashboard()).catch(() => {
+                sessionStorage.removeItem('admin_password');
+            });
+        }
+
+        function showDashboard() {
+            loginScreen.style.display = 'none';
+            dashboard.style.display = 'block';
+            renderStats();
+            renderSubmissions();
+            startAutoRefresh();
+        }
+
+        // ===== Fetch =====
+        async function fetchSubmissions() {
+            const res = await fetch(API_BASE + '/api/submissions', {
+                headers: { 'Authorization': 'Bearer ' + getPassword() }
+            });
+
+            if (res.status === 401) {
+                logout();
+                throw new Error('Unauthorized');
+            }
+
+            submissions = await res.json();
+            renderStats();
+            renderSubmissions();
+        }
+
+        // ===== Render Stats =====
+        function renderStats() {
+            const total = submissions.length;
+            const unread = submissions.filter(s => !s.read).length;
+            const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+            const thisWeek = submissions.filter(s => new Date(s.timestamp).getTime() > weekAgo).length;
+
+            document.getElementById('stat-total').textContent = total;
+            document.getElementById('stat-unread').textContent = unread;
+            document.getElementById('stat-week').textContent = thisWeek;
+        }
+
+        // ===== Render Submissions =====
+        function renderSubmissions() {
+            let filtered = [...submissions];
+
+            // Filter
+            if (currentFilter === 'unread') filtered = filtered.filter(s => !s.read);
+            if (currentFilter === 'read') filtered = filtered.filter(s => s.read);
+
+            // Search
+            if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                filtered = filtered.filter(s =>
+                    s.name.toLowerCase().includes(q) ||
+                    s.email.toLowerCase().includes(q) ||
+                    s.subject.toLowerCase().includes(q) ||
+                    s.message.toLowerCase().includes(q)
+                );
+            }
+
+            if (filtered.length === 0) {
+                submissionsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">${submissions.length === 0 ? '\u{1F4ED}' : '\u{1F50D}'}</div>
+                        <h3>${submissions.length === 0 ? 'No submissions yet' : 'No results found'}</h3>
+                        <p>${submissions.length === 0 ? 'Messages from your contact form will appear here.' : 'Try a different search term or filter.'}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            submissionsList.innerHTML = filtered.map(s => `
+                <div class="submission-card ${s.read ? '' : 'unread'}">
+                    <div class="submission-header">
+                        <div class="submission-meta">
+                            <span class="submission-name">${escapeHTML(s.name)}</span>
+                            <a href="mailto:${escapeHTML(s.email)}" class="submission-email">${escapeHTML(s.email)}</a>
+                        </div>
+                        <span class="submission-time">${relativeTime(s.timestamp)}</span>
+                    </div>
+                    <div class="submission-subject">${escapeHTML(s.subject)}</div>
+                    <div class="submission-message">${escapeHTML(s.message)}</div>
+                    <div class="submission-actions">
+                        <button class="btn-action reply" onclick="window.location.href='mailto:${escapeHTML(s.email)}?subject=Re: ${encodeURIComponent(s.subject)}'">
+                            Reply
+                        </button>
+                        <button class="btn-action" onclick="toggleRead('${s.id}', ${!s.read})">
+                            ${s.read ? 'Mark Unread' : 'Mark Read'}
+                        </button>
+                        <button class="btn-action delete" onclick="deleteSubmission('${s.id}')">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== Actions =====
+        window.toggleRead = async function(id, read) {
+            try {
+                await fetch(API_BASE + '/api/submissions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + getPassword(),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, read })
+                });
+
+                const sub = submissions.find(s => s.id === id);
+                if (sub) sub.read = read;
+                renderStats();
+                renderSubmissions();
+            } catch (err) {
+                alert('Failed to update. Please try again.');
+            }
+        };
+
+        window.deleteSubmission = async function(id) {
+            if (!confirm('Delete this submission? This cannot be undone.')) return;
+
+            try {
+                await fetch(API_BASE + '/api/submissions', {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + getPassword(),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
+                });
+
+                submissions = submissions.filter(s => s.id !== id);
+                renderStats();
+                renderSubmissions();
+            } catch (err) {
+                alert('Failed to delete. Please try again.');
+            }
+        };
+
+        window.logout = function() {
+            sessionStorage.removeItem('admin_password');
+            stopAutoRefresh();
+            dashboard.style.display = 'none';
+            loginScreen.style.display = 'block';
+            document.getElementById('password').value = '';
+            loginError.style.display = 'none';
+        };
+
+        // ===== Search =====
+        let searchTimeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                searchQuery = searchInput.value.trim();
+                renderSubmissions();
+            }, 250);
+        });
+
+        // ===== Filter Tabs =====
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.filter;
+                renderSubmissions();
+            });
+        });
+
+        // ===== Auto Refresh =====
+        function startAutoRefresh() {
+            stopAutoRefresh();
+            refreshTimer = setInterval(() => {
+                fetchSubmissions().catch(() => {});
+            }, 60000);
+        }
+
+        function stopAutoRefresh() {
+            if (refreshTimer) {
+                clearInterval(refreshTimer);
+                refreshTimer = null;
+            }
+        }
+
+        // ===== Helpers =====
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function relativeTime(timestamp) {
+            const now = Date.now();
+            const diff = now - new Date(timestamp).getTime();
+            const mins = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (mins < 1) return 'Just now';
+            if (mins < 60) return `${mins}m ago`;
+            if (hours < 24) return `${hours}h ago`;
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days}d ago`;
+
+            return new Date(timestamp).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: days > 365 ? 'numeric' : undefined
+            });
+        }
+    })();
+    </script>
+</body>
+</html>

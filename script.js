@@ -95,6 +95,65 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// ===== Contact Form Handling =====
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = document.getElementById('submit-btn');
+        const formStatus = document.getElementById('form-status');
+        const originalText = submitBtn.textContent;
+
+        // Loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.style.opacity = '0.7';
+        formStatus.style.display = 'none';
+
+        const formData = {
+            name: contactForm.querySelector('#name').value.trim(),
+            email: contactForm.querySelector('#email').value.trim(),
+            subject: contactForm.querySelector('#subject').value.trim(),
+            message: contactForm.querySelector('#message').value.trim(),
+        };
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+                formStatus.style.display = 'block';
+                formStatus.className = 'form-status success';
+                formStatus.innerHTML = `
+                    <div class="status-icon">\u2713</div>
+                    <h3>Message sent!</h3>
+                    <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
+                `;
+                contactForm.style.display = 'none';
+            } else {
+                throw new Error(data.error || 'Something went wrong');
+            }
+        } catch (err) {
+            formStatus.style.display = 'block';
+            formStatus.className = 'form-status error';
+            formStatus.innerHTML = `
+                <div class="status-icon">!</div>
+                <h3>Oops, something went wrong</h3>
+                <p>${err.message}. Please try again or email us directly.</p>
+            `;
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+            submitBtn.style.opacity = '1';
+        }
+    });
+}
+
 // ===== Init =====
 document.addEventListener('DOMContentLoaded', () => {
     addScrollAnimations();

@@ -55,7 +55,7 @@
         <div class="content-container">
             <div class="contact-layout">
                 <div class="contact-form">
-                    <form action="https://formspree.io/f/contact@getnourishapp.com" method="POST">
+                    <form id="contact-form">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input type="text" id="name" name="name" placeholder="Your full name" required>
@@ -72,8 +72,9 @@
                             <label for="message">Message</label>
                             <textarea id="message" name="message" placeholder="Tell us more..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Send Message</button>
+                        <button type="submit" id="submit-btn" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Send Message</button>
                     </form>
+                    <div id="form-status" class="form-status" style="display: none;"></div>
                 </div>
                 <div class="contact-sidebar">
                     <div class="contact-info-card">

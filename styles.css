@@ -1781,3 +1781,64 @@ h2 {
         padding: 60px 20px;
     }
 }
+
+/* ===== Form Status States ===== */
+.form-status {
+    text-align: center;
+    padding: 48px 24px;
+    border-radius: var(--radius-lg);
+    margin-top: 20px;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-status.success {
+    background: var(--accent-green-light);
+    border: 1.5px solid #a3d9b1;
+}
+
+.form-status.error {
+    background: #fef2f2;
+    border: 1.5px solid #fca5a5;
+}
+
+.form-status .status-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 16px;
+    color: white;
+}
+
+.form-status.success .status-icon {
+    background: var(--accent-green);
+}
+
+.form-status.error .status-icon {
+    background: #ef4444;
+}
+
+.form-status h3 {
+    font-family: var(--font-primary);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.form-status p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0 auto;
+}
