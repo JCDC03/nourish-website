@@ -458,9 +458,7 @@
             loginError.style.display = 'none';
 
             try {
-                const res = await fetch(API_BASE + '/api/submissions', {
-                    headers: { 'Authorization': 'Bearer ' + pw }
-                });
+                const res = await fetch(API_BASE + '/api/submissions?token=' + encodeURIComponent(pw));
 
                 if (res.status === 401) {
                     loginError.textContent = 'Incorrect password. Please try again.';
@@ -496,9 +494,7 @@
 
         // ===== Fetch =====
         async function fetchSubmissions() {
-            const res = await fetch(API_BASE + '/api/submissions', {
-                headers: { 'Authorization': 'Bearer ' + getPassword() }
-            });
+            const res = await fetch(API_BASE + '/api/submissions?token=' + encodeURIComponent(getPassword()));
 
             if (res.status === 401) {
                 logout();
@@ -583,11 +579,8 @@
             try {
                 await fetch(API_BASE + '/api/submissions', {
                     method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + getPassword(),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id, read })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, read, token: getPassword() })
                 });
 
                 const sub = submissions.find(s => s.id === id);
@@ -605,11 +598,8 @@
             try {
                 await fetch(API_BASE + '/api/submissions', {
                     method: 'DELETE',
-                    headers: {
-                        'Authorization': 'Bearer ' + getPassword(),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, token: getPassword() })
                 });
 
                 submissions = submissions.filter(s => s.id !== id);
