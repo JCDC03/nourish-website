@@ -458,7 +458,9 @@
             loginError.style.display = 'none';
 
             try {
-                const res = await fetch(API_BASE + '/api/submissions?token=' + encodeURIComponent(pw));
+                const res = await fetch(API_BASE + '/api/submissions', {
+                    headers: { 'Authorization': 'Bearer ' + pw }
+                });
 
                 if (res.status === 401) {
                     loginError.textContent = 'Incorrect password. Please try again.';
@@ -494,7 +496,9 @@
 
         // ===== Fetch =====
         async function fetchSubmissions() {
-            const res = await fetch(API_BASE + '/api/submissions?token=' + encodeURIComponent(getPassword()));
+            const res = await fetch(API_BASE + '/api/submissions', {
+                headers: { 'Authorization': 'Bearer ' + getPassword() }
+            });
 
             if (res.status === 401) {
                 logout();
@@ -579,8 +583,11 @@
             try {
                 await fetch(API_BASE + '/api/submissions', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, read, token: getPassword() })
+                    headers: {
+                        'Authorization': 'Bearer ' + getPassword(),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, read })
                 });
 
                 const sub = submissions.find(s => s.id === id);
@@ -598,8 +605,11 @@
             try {
                 await fetch(API_BASE + '/api/submissions', {
                     method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id, token: getPassword() })
+                    headers: {
+                        'Authorization': 'Bearer ' + getPassword(),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id })
                 });
 
                 submissions = submissions.filter(s => s.id !== id);

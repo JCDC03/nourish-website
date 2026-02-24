@@ -10,13 +10,9 @@ export default async function handler(req, res) {
         return res.status(200).end();
     }
 
-    // Authenticate — check header first, then query param, then body
-    const fromHeader = req.headers.authorization?.replace('Bearer ', '');
-    const fromQuery = req.query?.token;
-    const fromBody = req.body?.token;
-    const password = (fromHeader || fromQuery || fromBody || '').trim();
+    // Authenticate
+    const password = (req.headers.authorization?.replace('Bearer ', '') || '').trim();
     const expected = (process.env.ADMIN_PASSWORD || '').trim();
-
     if (!password || !expected || password !== expected) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
