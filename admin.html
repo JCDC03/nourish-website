@@ -564,7 +564,7 @@
                     <div class="submission-subject">${escapeHTML(s.subject)}</div>
                     <div class="submission-message">${escapeHTML(s.message)}</div>
                     <div class="submission-actions">
-                        <button class="btn-action reply" onclick="window.location.href='mailto:${escapeHTML(s.email)}?subject=Re: ${encodeURIComponent(s.subject)}'">
+                        <button class="btn-action reply" onclick="window.open('mailto:${escapeHTML(s.email)}?subject=Re: ${encodeURIComponent(s.subject)}', '_blank')
                             Reply
                         </button>
                         <button class="btn-action" onclick="toggleRead('${s.id}', ${!s.read})">
