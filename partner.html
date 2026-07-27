@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Dashboard - Nourish</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/sprout-icon.png">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        body { background: var(--bg-primary); font-family: var(--font-body); color: var(--text-primary); }
+        .partner-container { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+        .partner-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .partner-header img { width: 40px; height: 40px; border-radius: 10px; }
+        .partner-header h1 { font-family: var(--font-primary); font-size: 1.5rem; font-weight: 800; }
+        .partner-header .sub { font-size: 0.85rem; color: var(--text-secondary); }
+
+        .login-card {
+            max-width: 400px; margin: 40px auto; background: var(--bg-card);
+            border: 1.5px solid var(--border); border-radius: var(--radius-lg); padding: 40px 32px;
+        }
+        .login-card h2 { font-family: var(--font-primary); font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+        .login-card p { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 24px; }
+        .login-card label { display: block; font-size: 0.8rem; font-weight: 600; margin: 14px 0 6px; }
+        .login-card input {
+            width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm); font-family: var(--font-body); font-size: 0.95rem; background: var(--bg-primary);
+        }
+        .login-card input:focus { outline: none; border-color: var(--accent-green); }
+        .login-card button {
+            width: 100%; margin-top: 22px; padding: 13px; border: none; border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: #fff; font-family: var(--font-primary); font-weight: 700; font-size: 0.95rem; cursor: pointer;
+            transition: opacity var(--transition);
+        }
+        .login-card button:disabled { opacity: 0.6; cursor: wait; }
+        .login-error {
+            background: #fef2f2; border: 1px solid #fca5a5; color: #dc2626;
+            padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; margin-bottom: 6px; display: none;
+        }
+
+        .dash { display: none; }
+        .share-row {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            background: var(--accent-green-light); border: 1.5px solid var(--accent-green);
+            border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 24px;
+        }
+        .share-row .code { font-weight: 700; font-family: var(--font-primary); word-break: break-all; }
+        .share-row button {
+            margin-left: auto; padding: 8px 14px; border: none; border-radius: var(--radius-sm);
+            background: var(--accent-green); color: #fff; font-weight: 600; font-size: 0.8rem; cursor: pointer;
+        }
+        .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+        @media (max-width: 640px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+        .stat-card {
+            background: var(--bg-card); border: 1.5px solid var(--border);
+            border-radius: var(--radius-md); padding: 20px; text-align: center;
+        }
+        .stat-card .num { font-family: var(--font-primary); font-size: 1.6rem; font-weight: 800; color: var(--accent-green); }
+        .stat-card .lbl { font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px; }
+        .section-title { font-family: var(--font-primary); font-size: 1.05rem; font-weight: 700; margin: 26px 0 12px; }
+        table.statements { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: var(--radius-md); overflow: hidden; border: 1.5px solid var(--border); }
+        table.statements th, table.statements td { padding: 12px 16px; font-size: 0.85rem; text-align: left; }
+        table.statements th { background: var(--bg-secondary); font-weight: 700; }
+        table.statements tr + tr td { border-top: 1px solid var(--border); }
+        .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+        .pill.paid { background: var(--accent-green-light); color: var(--accent-green); }
+        .pill.due { background: #fff7ed; color: var(--accent-orange); }
+        .note { font-size: 0.78rem; color: var(--text-muted); margin-top: 18px; line-height: 1.5; }
+        .signout { background: none; border: none; color: var(--text-muted); font-size: 0.8rem; cursor: pointer; text-decoration: underline; margin-left: auto; }
+        .loading { color: var(--text-secondary); font-size: 0.9rem; padding: 30px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="partner-container">
+        <div class="partner-header">
+            <img src="images/sprout-icon.png" alt="Nourish">
+            <div>
+                <h1>Partner Dashboard</h1>
+                <div class="sub" id="greeting">Nourish partner earnings &amp; referrals</div>
+            </div>
+            <button class="signout" id="signout" style="display:none">Sign out</button>
+        </div>
+
+        <div class="login-card" id="login">
+            <h2>Sign in</h2>
+            <p>Use your Nourish app account.</p>
+            <div class="login-error" id="loginError"></div>
+            <form id="loginForm">
+                <label for="email">Email</label>
+                <input type="email" id="email" autocomplete="email" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" autocomplete="current-password" required>
+                <button type="submit" id="loginBtn">Sign in</button>
+            </form>
+            <button type="button" id="forgotBtn" style="background:none;border:none;color:var(--text-muted);font-size:0.8rem;cursor:pointer;text-decoration:underline;margin-top:10px;padding:0;">
+                Forgot password?
+            </button>
+            <div style="display:flex;align-items:center;gap:10px;margin:18px 0 6px;color:var(--text-muted);font-size:0.75rem;">
+                <span style="flex:1;height:1px;background:var(--border);"></span>or<span style="flex:1;height:1px;background:var(--border);"></span>
+            </div>
+            <button type="button" id="googleBtn" style="width:100%;margin-top:8px;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);font-family:var(--font-primary);font-weight:600;font-size:0.9rem;cursor:pointer;">
+                Continue with Google
+            </button>
+            <button type="button" id="appleBtn" style="width:100%;margin-top:10px;padding:12px;border:none;border-radius:var(--radius-sm);background:#000;color:#fff;font-family:var(--font-primary);font-weight:600;font-size:0.9rem;cursor:pointer;">
+                Continue with Apple
+            </button>
+        </div>
+
+        <div class="dash" id="dash">
+            <div class="share-row" id="shareRow" style="display:none">
+                <span>Your link:</span>
+                <span class="code" id="shareLink"></span>
+                <button id="copyBtn">Copy</button>
+            </div>
+            <div class="stat-grid">
+                <div class="stat-card"><div class="num" id="stSignups">–</div><div class="lbl">Referred signups</div></div>
+                <div class="stat-card"><div class="num" id="stPaying">–</div><div class="lbl">Paying subscribers</div></div>
+                <div class="stat-card"><div class="num" id="stMtd">–</div><div class="lbl">This month (est.)</div></div>
+                <div class="stat-card"><div class="num" id="stLife">–</div><div class="lbl">Lifetime earned</div></div>
+            </div>
+            <div class="section-title">Monthly statements</div>
+            <div id="stTableWrap"><div class="loading" id="stEmpty">No statements yet — the first one is generated on the 1st of next month.</div></div>
+            <p class="note">
+                Figures update live from store-reported transactions; refunds are netted automatically.
+                "This month" is an estimate until the month closes. Monthly statements are the payout
+                record: your share is <span id="shareNote">50%</span> of net store receipts, paid via Wise
+                within 14 days of Nourish receiving the corresponding store payout (balances under $50
+                roll into the next month).
+            </p>
+        </div>
+        <div class="loading" id="loading" style="display:none">Loading your stats…</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, OAuthProvider, signInWithPopup, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+        const app = initializeApp({
+            apiKey: "AIzaSyCxWU5hGwhiO-XnNCyFNa33UIUpcvvjXo0",
+            authDomain: "nourish-5a6ae.firebaseapp.com",
+            projectId: "nourish-5a6ae",
+        });
+        const auth = getAuth(app);
+        const FN_URL = "https://us-central1-nourish-5a6ae.cloudfunctions.net/getPartnerStats";
+
+        const $ = (id) => document.getElementById(id);
+        const fmtUsd = (v) => "$" + Number(v).toFixed(2);
+
+        async function loadStats(user) {
+            $("login").style.display = "none";
+            $("loading").style.display = "block";
+            try {
+                const idToken = await user.getIdToken();
+                const res = await fetch(FN_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", Authorization: "Bearer " + idToken },
+                    body: JSON.stringify({ data: {} }),
+                });
+                const body = await res.json();
+                if (!res.ok || body.error) {
+                    const code = body.error?.status || "";
+                    throw new Error(code === "PERMISSION_DENIED"
+                        ? "This account doesn't have partner access."
+                        : (body.error?.message || "Failed to load stats"));
+                }
+                render(body.result);
+            } catch (e) {
+                await signOut(auth);
+                $("loading").style.display = "none";
+                $("login").style.display = "block";
+                const err = $("loginError");
+                err.textContent = e.message;
+                err.style.display = "block";
+                return;
+            }
+            $("loading").style.display = "none";
+            $("dash").style.display = "block";
+            $("signout").style.display = "inline";
+        }
+
+        function render(r) {
+            $("greeting").textContent = "Welcome back, " + r.name;
+            if (r.referralLink) {
+                $("shareRow").style.display = "flex";
+                $("shareLink").textContent = r.referralLink.replace("https://", "");
+                $("copyBtn").onclick = async () => {
+                    await navigator.clipboard.writeText(r.referralLink);
+                    $("copyBtn").textContent = "Copied!";
+                    setTimeout(() => ($("copyBtn").textContent = "Copy"), 1500);
+                };
+            }
+            $("stSignups").textContent = r.referredSignups;
+            $("stPaying").textContent = r.lifetime.payingUsers;
+            $("stMtd").textContent = fmtUsd(r.mtd.commissionUsd);
+            $("stLife").textContent = fmtUsd(r.lifetime.commissionUsd);
+            $("shareNote").textContent = r.sharePercent + "%";
+            if (r.statements.length > 0) {
+                const rows = r.statements.map((s) => `
+                    <tr>
+                        <td>${s.period}</td>
+                        <td>${s.referredSignupsTotal}</td>
+                        <td>${s.payingUsers}</td>
+                        <td><b>${fmtUsd(s.commissionUsd)}</b></td>
+                        <td><span class="pill ${s.status === "paid" ? "paid" : "due"}">${s.status}</span></td>
+                    </tr>`).join("");
+                $("stTableWrap").innerHTML = `
+                    <table class="statements">
+                        <tr><th>Month</th><th>Signups</th><th>Paying</th><th>Commission</th><th>Status</th></tr>
+                        ${rows}
+                    </table>`;
+            }
+        }
+
+        $("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = $("loginBtn");
+            const err = $("loginError");
+            err.style.display = "none";
+            btn.disabled = true;
+            try {
+                await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value);
+            } catch {
+                err.textContent = "Incorrect email or password.";
+                err.style.display = "block";
+            }
+            btn.disabled = false;
+        });
+
+        async function popupSignIn(provider, label) {
+            const err = $("loginError");
+            err.style.display = "none";
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (e) {
+                if (e.code !== "auth/popup-closed-by-user" && e.code !== "auth/cancelled-popup-request") {
+                    err.textContent = label + " sign-in failed. Try again.";
+                    err.style.display = "block";
+                }
+            }
+        }
+        $("googleBtn").addEventListener("click", () => popupSignIn(new GoogleAuthProvider(), "Google"));
+        $("appleBtn").addEventListener("click", () => popupSignIn(new OAuthProvider("apple.com"), "Apple"));
+
+        $("forgotBtn").addEventListener("click", async () => {
+            const err = $("loginError");
+            const email = $("email").value.trim();
+            if (!email) {
+                err.textContent = "Enter your email above first, then tap Forgot password.";
+                err.style.display = "block";
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                err.style.background = "var(--accent-green-light)";
+                err.style.borderColor = "var(--accent-green)";
+                err.style.color = "var(--accent-green)";
+                err.textContent = "Reset email sent — check your inbox.";
+                err.style.display = "block";
+            } catch {
+                err.textContent = "Couldn't send reset email. Check the address.";
+                err.style.display = "block";
+            }
+        });
+
+        $("signout").addEventListener("click", async () => {
+            await signOut(auth);
+            location.reload();
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) loadStats(user);
+        });
+    </script>
+</body>
+</html>
