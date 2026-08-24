@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nourish — Eat Better, Together.</title>
+<meta name="description" content="Track your meals, feel the difference. Get Nourish on the App Store.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Nourish">
+<meta property="og:title" content="Nourish — Eat Better, Together.">
+<meta property="og:description" content="Your meals. Your energy. Your people. Get Nourish on the App Store or Google Play.">
+<meta property="og:image" content="https://www.getnourishapp.com/app/og.png?v=4">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta property="og:url" content="https://www.getnourishapp.com/app">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F3EFE8">
+<link rel="icon" href="/app/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/app/favicon.png">
+<link rel="apple-touch-icon" href="/app/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap">
+<style>
+  :root {
+    --canvas: #F3EFE8;
+    --surface: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #6B6B6B;
+    --green: #2D8A4E;
+    --green-deep: #1E6B3A; /* badge text on the tint — #2D8A4E only hits 3.8:1 there */
+    --green-tint: #E8F5E9;
+    --shadow: 0 24px 64px rgba(0,0,0,0.15);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font: 400 17px/1.6 Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+    text-align: center;
+  }
+  main { width: 100%; max-width: 380px; }
+  .icon-card {
+    width: 108px;
+    height: 108px;
+    margin: 0 auto 24px;
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .icon-card img { width: 100%; height: 100%; display: block; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-tint);
+    color: var(--green-deep);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 8px 16px;
+    border-radius: 50px;
+    margin: 0 0 20px;
+  }
+  .badge::before {
+    content: "";
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+  h1 {
+    font-size: 2.35rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    font-weight: 800;
+  }
+  h1 .accent { color: var(--green); }
+  p.sub { color: var(--muted); margin: 0 0 32px; font-size: 1rem; }
+  a.cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 17px 24px;
+    border-radius: 50px;
+    transition: transform 120ms ease, opacity 120ms ease;
+  }
+  a.cta + a.cta { margin-top: 12px; }
+  a.cta.secondary { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+  a.cta:active { transform: scale(0.975); opacity: 0.9; }
+  a.cta svg { width: 18px; height: 22px; flex: none; }
+  a.fallback {
+    display: inline-block;
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    margin: 0 auto 24px;
+    border: 2px solid rgba(26,26,26,0.12);
+    border-top-color: var(--green);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
+  /* Escape-failed modal */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(26,26,26,0.45);
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 16px;
+    z-index: 10;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 36px;
+    box-shadow: var(--shadow);
+    padding: 28px 24px calc(28px + env(safe-area-inset-bottom));
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+    color: var(--ink);
+  }
+  .modal h2 { font-size: 1.25rem; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.01em; }
+  .modal p { color: var(--muted); font-size: 0.92rem; margin: 0 0 20px; }
+  .modal .steps {
+    background: var(--green-tint);
+    color: var(--ink);
+    border-radius: 20px;
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    margin: 0 0 20px;
+    text-align: left;
+  }
+  .modal button.retry {
+    display: block;
+    width: 100%;
+    background: var(--ink);
+    color: #fff;
+    border: 0;
+    font: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 16px 24px;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+  .modal button.copy {
+    display: inline-block;
+    background: none;
+    border: 0;
+    margin-top: 16px;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="icon-card"><img src="/app/appicon.png" alt="Nourish"></div>
+  <div class="badge">Nourish · Social Food Tracker</div>
+  <div class="spinner" id="spinner"></div>
+  <h1 id="headline">Eat Better,<br><span class="accent">Together.</span></h1>
+  <p class="sub" id="sub">Your meals. Your energy. Your people.</p>
+  <a class="cta" id="cta-ios" href="#">
+    <svg viewBox="0 0 384 512" fill="currentColor" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+    <span>App Store</span>
+  </a>
+  <a class="cta secondary" id="cta-android" href="#">
+    <svg viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M325.3 234.3 104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+    <span>Google Play</span>
+  </a>
+  <a class="fallback" id="fallback" href="#">Open in browser instead</a>
+</main>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <h2>One more step</h2>
+    <p id="modal-sub">Instagram is blocking the App Store link. Open this page in your real browser:</p>
+    <div class="steps">Tap <strong>&#8943;</strong> (top right) &rarr; <strong>Open in external browser</strong></div>
+    <button class="retry" id="retry">Open in my browser</button>
+    <button class="copy" id="copy">Copy link instead</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ---- config -------------------------------------------------------------
+  var APPLE_ID    = "6756328676";
+  var ANDROID_PKG = "app.nourish.app";
+  var IOS_WEB     = "https://apps.apple.com/app/id" + APPLE_ID;
+  var ANDROID_WEB = "https://play.google.com/store/apps/details?id=" + ANDROID_PKG;
+
+  // ---- reusable in-app-browser helper ------------------------------------
+  var ua = navigator.userAgent || "";
+  function isIOS() {
+    return /iPad|iPhone|iPod/i.test(ua) ||
+           (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  }
+  function isAndroid() { return /Android/i.test(ua); }
+  // "Instagram" covers IG + Threads; FBAN/FBAV/FB_IAB/Messenger cover Facebook.
+  function inAppBrowser() {
+    if (/Instagram/i.test(ua)) return "instagram";
+    if (/FBAN|FBAV|FB_IAB|Messenger/i.test(ua)) return "facebook";
+    return null;
+  }
+  // Must be called SYNCHRONOUSLY inside a user gesture, or iOS drops it.
+  function escapeToNativeBrowser(app, targetUrl) {
+    if (isAndroid()) {
+      window.location.href = "intent://" + targetUrl.replace(/^https?:\/\//, "") +
+                             "#Intent;scheme=https;end";
+    } else if (app === "instagram") {
+      // The IG app intercepts this and opens Safari itself. x-safari- via
+      // location.href is silently blocked by IG's webview — don't use it here.
+      window.location.href = "instagram://extbrowser/?url=" + encodeURIComponent(targetUrl);
+    } else {
+      window.open("x-safari-" + targetUrl, "_blank");
+    }
+  }
+
+  var iapp = inAppBrowser();
+  var web  = isAndroid() ? ANDROID_WEB : IOS_WEB;   // this device's own store
+
+  var ctaIos = document.getElementById("cta-ios");
+  var ctaAndroid = document.getElementById("cta-android");
+  var fallback = document.getElementById("fallback");
+  var sub = document.getElementById("sub");
+  var spinner = document.getElementById("spinner");
+  var modal = document.getElementById("modal");
+  var retry = document.getElementById("retry");
+  var copy = document.getElementById("copy");
+
+  fallback.href = web;
+  ctaIos.href = IOS_WEB;         // always a real store link underneath
+  ctaAndroid.href = ANDROID_WEB;
+
+  if (isAndroid()) {
+    // Put the device's own store first and give it the primary (black) style.
+    ctaAndroid.classList.remove("secondary");
+    ctaIos.classList.add("secondary");
+    ctaIos.parentNode.insertBefore(ctaAndroid, ctaIos);
+    document.getElementById("modal-sub").textContent =
+      "Instagram is blocking the Google Play link. Open this page in your real browser:";
+  }
+
+  // Desktop: no scheme worth trying, both buttons go to the web listings.
+  if (!isIOS() && !isAndroid()) {
+    spinner.remove();
+    sub.textContent = "Open this link on your phone, or view the listing on the web.";
+    fallback.remove();
+    return;
+  }
+
+  // ---- in-app browser path (Instagram / Facebook / Messenger) ------------
+  if (iapp) {
+    // No auto-attempt: webviews only permit external schemes on a user gesture.
+    spinner.remove();
+
+    // Leaving the page = the escape worked; cancel the failure modal.
+    var escaped = false;
+    var lastTarget = web;
+    function markEscaped() { escaped = true; modal.classList.remove("show"); }
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) markEscaped();
+    });
+    window.addEventListener("pagehide", markEscaped);
+    window.addEventListener("blur", markEscaped);
+
+    function attemptEscape(target) {
+      escaped = false;
+      lastTarget = target;
+      escapeToNativeBrowser(iapp, target);
+      setTimeout(function () {
+        if (!escaped && !document.hidden) modal.classList.add("show");
+      }, 1500);
+    }
+    ctaIos.addEventListener("click", function (e) { e.preventDefault(); attemptEscape(IOS_WEB); });
+    ctaAndroid.addEventListener("click", function (e) { e.preventDefault(); attemptEscape(ANDROID_WEB); });
+    retry.addEventListener("click", function () { attemptEscape(lastTarget); });
+
+    copy.addEventListener("click", function () {
+      var link = window.location.href;
+      function done() { copy.textContent = "Copied — paste it in Safari"; }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(done, done);
+      } else {
+        var tmp = document.createElement("textarea");
+        tmp.value = link;
+        document.body.appendChild(tmp);
+        tmp.select();
+        try { document.execCommand("copy"); } catch (err) {}
+        tmp.remove();
+        done();
+      }
+    });
+    return;
+  }
+
+  // ---- normal mobile browser path ----------------------------------------
+  // A tap is a user gesture, which browsers permit for external schemes far
+  // more reliably than an automatic navigation. Deep-scheme only the button
+  // matching this device; the other store's button stays a plain https link.
+  var deep = isAndroid() ? "market://details?id=" + ANDROID_PKG
+                         : "itms-apps://apps.apple.com/app/id" + APPLE_ID;
+  var ownCta = isAndroid() ? ctaAndroid : ctaIos;
+  ownCta.addEventListener("click", function (e) {
+    e.preventDefault();
+    window.location.href = deep;
+    // If the handoff silently fails, fall through to the web listing.
+    setTimeout(function () { window.location.href = web; }, 1200);
+  });
+
+  // Auto-attempt this device's store once on load. Harmless if blocked.
+  setTimeout(function () { window.location.href = deep; }, 60);
+
+  // If we're still on the page after a moment, the auto-attempt didn't take.
+  setTimeout(function () {
+    if (document.hidden) return;        // we probably left; don't nag
+    spinner.remove();
+  }, 1500);
+})();
+</script>
+</body>
+</html>

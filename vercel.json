@@ -8,13 +8,7 @@
     }
   },
   "rewrites": [
-    { "source": "/partner", "destination": "/partner.html" }
-  ],
-  "redirects": [
-    {
-      "source": "/app",
-      "destination": "https://applink-six.vercel.app/?v=4&utm_source=ig&utm_medium=social&utm_content=link_in_bio",
-      "permanent": false
-    }
+    { "source": "/partner", "destination": "/partner.html" },
+    { "source": "/app", "destination": "/app/index.html" }
   ]
 }
